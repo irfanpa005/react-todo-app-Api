@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/react-todo-app-Api/",
   plugins: [react()],
-  base: "/[react-todo-app-Api]/"
+  
 })
