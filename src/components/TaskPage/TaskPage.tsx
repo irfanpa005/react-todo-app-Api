@@ -5,7 +5,6 @@ import  {TasksList}  from './TasksList'
 import { NewTask } from './NewTask';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -22,17 +21,17 @@ export const Tasks: React.FC = () => {
   
   interface Tokens {
       access: string;
-      refresh: string;
+      // refresh: string;
       username:string;
     }
 
 
     const navigate = useNavigate();
     const location = useLocation();
-    const { access, refresh, username } = location.state as Tokens;
+    const { access,  username } = location.state as Tokens;
 
-    const notifyError = (msg:string) => toast.error(msg);
-    const notifySuccess = (msg:string) => toast.success(msg);
+    // const notifyError = (msg:string) => toast.error(msg);
+    // const notifySuccess = (msg:string) => toast.success(msg);
 
     const BASE_URL = 'https://www.mulearn.org/api/v1/mulearn-task/';
     const TODO_ENDPOINT = 'todo/';
@@ -114,6 +113,7 @@ export const Tasks: React.FC = () => {
           }
         );
         getToDo();
+        console.log(response)
 
       } catch (error) {
         console.error('Error:', error);
@@ -135,7 +135,7 @@ export const Tasks: React.FC = () => {
           }
         );
         getToDo();
-
+        console.log(response)
       } catch (error) {
         // Handle errors here
         console.error('Error:', error);

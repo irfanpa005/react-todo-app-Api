@@ -6,9 +6,6 @@ import {Home} from './components/HomePage/home';
 import {Register} from './components/Register/Regsiter';
 import {Tasks} from './components/TaskPage/TaskPage';
 import TokenProtectedRoute from './components/Protected Route/ProtectedRoute';
-import { Test } from './Test';
-
-
 
 
 function App() {
@@ -17,9 +14,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Header />}>
-
-          <Route path="test" element={<Test />} />
-
             <Route index element={<Home />} />
             <Route path="register" element={<Register />} />
               <Route path="todo-tasks/:username" 
