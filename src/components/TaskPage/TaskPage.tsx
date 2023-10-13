@@ -81,12 +81,12 @@ export const Tasks: React.FC = () => {
           {
             headers:
             {
-              'Content-Type' : 'application/json',
+              'Content-Type' : 'multipart/form-data',
               'Authorization': 'Bearer ' + access
             },
 
           });
-
+        getToDo();
         console.log('Todo created:', response.data);
       }
       catch(error){
