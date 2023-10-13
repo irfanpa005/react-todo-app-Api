@@ -2,30 +2,27 @@ import { Link ,useNavigate} from "react-router-dom"
 import { useState } from "react"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 
 export const Register: React.FC = () =>{
     const navigate = useNavigate();
+    const BASE_URL = 'https://www.mulearn.org/api/v1/mulearn-task/';
+    const REGISTER_ENDPOINT = 'register/';
 
-    {/* Error Messages */}
-    const notifUserError = () => toast.error('Username already exists.');
-    const notifEmailError = () => toast.error('Account with email already exists.');
-    const notifPasswordError = () => toast.error('Passwords Missmatch.');
-    const notifRegSuccess = () => toast.success('User Created Successfully.');
-    const notifEmptyFields = () => toast.error('Please enter valid details.');
-
+    {/* Error / success notification */}
+    const notifyError = (msg:string) => toast.error(msg);
+    const notifySuccess = (msg:string) => toast.success(msg);
 
     {/* Registration Form fields */}
     type userProps = {
         userName: string;
-        email: string;
         password: string;
         confPassword: string
       }
 
     const [newUserData, setUser] = useState<userProps> ({
         userName: '',
-        email: '',
         password: '',
         confPassword: ''
       })
@@ -36,30 +33,37 @@ export const Register: React.FC = () =>{
         setUser(prevData => ({...prevData, [name]: value}))
       }
     
-    const handleRegistration = (e:React.ChangeEvent<HTMLFormElement> & {target: HTMLFormElement}) =>{
+    const handleRegistration = async (e:React.ChangeEvent<HTMLFormElement> & {target: HTMLFormElement}) =>{
         e.preventDefault();
-        const existingUserData = localStorage.getItem('users');
-        const users: userProps[] = existingUserData ? JSON.parse(existingUserData) : [];
-
-        const existingUserName = users.find((user) => user.userName === newUserData.userName);
-        const existingUserEmail = users.find((user) => user.email === newUserData.email);
-
-        if (newUserData.userName.trim() === '' || newUserData.email.trim() === '' ||
-            newUserData.password === '') {
-              notifEmptyFields();
-            }
+   
+        const registrationData = {
+          username: newUserData.userName,
+          password: newUserData.password,
+        };
     
-        if (existingUserName) {
-          notifUserError();
-        } else if (existingUserEmail) {
-          notifEmailError();
-        } else if (newUserData.password != newUserData.confPassword){
-          notifPasswordError();
-        } else {
-          users.push(newUserData);
-          localStorage.setItem('users', JSON.stringify(users));
-          navigate('/')
-          notifRegSuccess();
+        if (newUserData.password === newUserData.confPassword){
+            try {
+              const response = await axios.post(BASE_URL + REGISTER_ENDPOINT, registrationData, {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+        
+              // Handle successful registration response
+              console.log(response.data.message);
+              notifySuccess('Registration Success')
+              navigate('/')
+            } catch (error:any) {
+              // Handle registration failure, including duplicate username
+              console.error('Registration failed:', error);
+        
+              if (error.response && error.response.data.username) {
+                const errorMessage = error.response.data.username[0];
+                notifyError(errorMessage);
+              }
+            }
+        } else{
+          notifyError('Password Mismatch')
         }
     }
 
@@ -69,7 +73,6 @@ export const Register: React.FC = () =>{
             <form onSubmit={handleRegistration}>
                 <h4>Register Here!</h4>
                 <input className='form-control' type='text' placeholder='username' name="userName" value={newUserData.userName} onChange={handleChange} required/>
-                <input className='form-control' type='email' placeholder='email' name="email" value={newUserData.email} onChange={handleChange} required/>
                 <input className='form-control' type='password' placeholder='password' name="password" value={newUserData.password} onChange={handleChange} required />
                 <input className='form-control' type='password' placeholder='confirm password' name="confPassword" value={newUserData.confPassword} onChange={handleChange} required />
                 <input className='form-control btn btn-info' type='submit' value='Register' />

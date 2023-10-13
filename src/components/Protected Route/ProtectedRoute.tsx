@@ -7,7 +7,7 @@ interface TokenProtectedRouteProps {
 
 const TokenProtectedRoute: React.FC<TokenProtectedRouteProps> = ({ children }) => {
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('access token');
 
   if (!token) {
     return <Navigate to="/" />;

@@ -2,17 +2,15 @@ import './tasks.css'
 import { BsFillTrash3Fill} from "react-icons/bs";
 
 type taskProps = {
-    id:string
-    task: string,
+    id:number
+    title: string,
     isCompleted: boolean
 }
 
 type taskItems ={
     tasks :taskProps[],
-    onDelete: (taskId: string) => void;
-    onComplete :(taskId: string,completed:boolean) => void;
-    // activeTasks:() => void;
-    // completedTasks:() => void;
+    onDelete: (taskId: number) => void;
+    onComplete :(taskId: number,completed:boolean) => void;
     clearCompleted:() => void;
     filterTasks:(filName:string) => void;
     filteredTasks:taskProps[]
@@ -33,7 +31,7 @@ export function TasksList ({tasks, onDelete, onComplete, filterTasks, filteredTa
                         return(
                         <li key={todo.id}>
                             <input type="checkbox" className="rounded-checkbox" name="completed" checked={todo.isCompleted} onChange={(e) => onComplete(todo.id,e.target.checked) }/>
-                            <h6 className={todo.isCompleted ? 'task-striked my-auto':'my-auto'}>{todo.task}</h6>
+                            <h6 className={todo.isCompleted ? 'task-striked my-auto':'my-auto'}>{todo.title}</h6>
                             <BsFillTrash3Fill className="trash-icon" size={20} onClick={() => onDelete(todo.id)} />
                         </li>
                         )

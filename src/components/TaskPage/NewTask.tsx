@@ -2,26 +2,22 @@ import React, { useState } from 'react';
 import './tasks.css'
 
 type taskProps = {
-    id:string
+    id:number
     task: string,
-    isCompleted: boolean,
-    user:string
+    isCompleted: boolean
 }
 
 type funProps = {
-    user:string,
-    addTask : (newTask:taskProps) =>void;
+    addTask : (newTitle:string) => void;
 }
 
 
-export function NewTask({addTask, user }:funProps){
+export function NewTask({addTask}:funProps){
 
     const [newtask, setNewTask] = useState<taskProps>({
-        id:crypto.randomUUID(),
+        id:0,
         task: "",
-        isCompleted: false,
-        user:user
-
+        isCompleted: false
     })
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -30,13 +26,12 @@ export function NewTask({addTask, user }:funProps){
     }
 
     const handleAddTask = () => {
-        addTask(newtask)
-        setNewTask(({
-            id:crypto.randomUUID(),
+        addTask(newtask.task)
+        setNewTask({
+            id:0,
             task: "",
             isCompleted: false,
-            user:user
-        }))
+        })
 
     }
 
